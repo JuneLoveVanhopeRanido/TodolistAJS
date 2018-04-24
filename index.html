@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html ng-app="todoApp">
+<head>
+	<title>Todo List</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/style.css">
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular.min.js"></script>
+</head>
+<body>
+    <div ng-controller="MainController as main" class="container">
+       <div class="col-xs-12">
+           <div class="jumbotron text-center">
+                <h1>You have <span>{{ main.tasklist.length }}</span> <span ng-show="main.tasklist.length <= 1 ">task</span><span ng-show="main.tasklist.length > 1">tasks</span></h1>
+            </div>
+            <div class="form-group clear">
+                <button  class="btn btn-lg btn-warning pull-left btn-block" ng-click="main.clearCompleted()">Clear All Completed Task </button>
+                <button class="btn btn-lg btn-danger btn-block" ng-click="main.clearAll()">Clear All Task </button>
+            </div>
+          <div class="add">
+                <form name="form"> 
+                   <div class="alert alert-danger" role="alert" ng-show="!form.$valid && form.$dirty"><span class="glyphicon glyphicon-exclamation-sign" area-hidden="true"></span> <span class="sr-only">Error</span>Enter A Valid Task!</div>   
+                    <div class="form-group">
+                        <input ng-pattern="/^[a-zA-Z]*$/" class="form-control" type="text" ng-model="main.taskInput" required>
+                    </div>
+                    <div class="form-group"> 
+                        <button class="btn btn-primary btn-lg btn-block" type="submit" ng-click="form.$valid && main.addTask()"><span class="glyphicon glyphicon-pushpin"></span>Save</button> 
+                    </div>          
+                </form>
+            </div>
+            <ul class="list-group" ng-repeat="task in main.tasklist">
+                <li class="list-group-item text-center clearfix" ng-class="{'completed-task':task.done}">
+                    <div class="edit-mode" ng-show="task.edit">
+                        <input ng-pattern="/^[a-zA-Z]*$/"  class="form-control edit-input" type="text" ng-model="task.desc">
+                        <button ng-click="task.edit=false" class="btn btn-success btn-lg btn-block" >Update</button>
+                    </div>
+                    <div class="show-mode" ng-show="!task.edit"> 
+                        <input class="pull-left btn btn-success" type="checkbox" ng-model="task.done" >
+                        <span class="desc">{{ task.desc | uppercase }}</span>
+                        <button class="btn btn-sm btn-danger pull-right" ng-click="main.delete($index)"><span class="glyphicon glyphicon-trash"></span></button>
+                        <button ng-hide="task.done" ng-click="task.edit=true" class="btn btn-sm btn-success pull-right"><span class="glyphicon glyphicon-pencil"></span></button>
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+    </div>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
